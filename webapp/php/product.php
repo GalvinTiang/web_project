@@ -1,26 +1,148 @@
 <?php
-    include_once("../dbconnect.php");
-    if(isset($_GET["button"])){
-        $op=$_GET["button"];
-        $option=$_GET["option"];
-        $search=$_GET["search"];
-        if ($op == 'search'){
-            if ($option == 'productid'){
-                $sqlproducts = "SELECT * FROM tbl_products WHERE productid LIKE '%$search%'";          
+  include_once ("../dbconnect.php");
+  session_start();
+  if (isset($_SESSION['sessionid'])){
+         $useremail= $_SESSION['user_email'];
+  }   if (isset($_GET['submit'])){
+        if ($_GET['submit'] == "cart"){
+          if(!empty($useremail)){
+            $productid=$_GET['productid'];
+            $cartqty='1';  
+
+            $addcart="INSERT INTO `tbl_carts`(`user_email`, `product_id`, `cart_qty`) VALUES ('$useremail','$productid','$cartqty')"; 
+            try{
+                  $conn->exec($addcart);
+                  echo "<script>alert('Cart updated')</script>";
+                  echo "<script> window.location.replace('product.php')</script>";
+              } catch (PDOException $e){
+                  echo "<script>alert('Failed')</script>";
+                  
+              }
             }
-            if ($option == 'name'){
-                $sqlproducts = "SELECT * FROM tbl_products WHERE name LIKE '%$search%'";           
-            }
+          }
+
         }
-    }else {
-        $sqlproducts = "SELECT * FROM tbl_products ORDER BY regdate DESC";
-    }
-    
-    $stmt = $conn->prepare($sqlproducts);
-    $stmt->execute();
-    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    $rows = $stmt->fetchAll();
-    
+  
+  $sqlquery = "SELECT * FROM tbl_products ";
+  $stmt = $conn->prepare($sqlquery);
+  $stmt->execute();
+  $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+  $rows = $stmt->fetchAll();
+
+
+  /*$useremail = "Guest";
+  $user_name = "Guest";
+  $user_phone = "-";
+  if (isset($_SESSION['sessionid']))
+  {
+      $useremail = $_SESSION["user_email"];
+      $user_name = $_SESSION["user_name"];
+      $user_phone = $_SESSION["user_phone"];
+  }
+  $carttotal = 0;
+  if (isset($_GET['submit']))
+  {
+      include_once ("dbconnect.php");
+      if ($_GET['submit'] == "cart")
+      {
+          if ($useremail != "Guest")
+          {
+              $productid = $_GET['productid'];
+              $cartqty = "1";
+              $stmt = $conn->prepare("SELECT * FROM `tbl_carts` WHERE `user_email` = '$useremail' AND `productid` = '$productid'");
+              $stmt->execute();
+              $number_of_rows = $stmt->rowCount();
+              $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+              $rows = $stmt->fetchAll();
+              if ($number_of_rows > 0)
+              {
+                  foreach ($rows as $carts)
+                  {
+                      $cartqty = $carts['cart_qty'];
+                  }
+                  $cartqty = $cartqty + 1;
+                  $updatecart = "UPDATE `tbl_carts` SET `cart_qty`= '$cartqty' WHERE user_email = '$useremail' AND product_id = '$productid'";
+                  $conn->exec($updatecart);
+                  echo "<script>alert('Cart updated')</script>";
+                  echo "<script> window.location.replace('index.php')</script>";
+              }
+              else
+              {
+                  $addcart = "INSERT INTO `tbl_carts`(`user_email`, `product_id`, `cart_qty`) VALUES ('$useremail','$productid','$cartqty')";
+                  try
+                  {
+                      $conn->exec($addcart);
+                      echo "<script>alert('Success')</script>";
+                      echo "<script> window.location.replace('product.php')</script>";
+                  }
+                  catch(PDOException $e)
+                  {
+                      echo "<script>alert('Failed')</script>";
+                  }
+              }
+  
+          }
+          else
+          {
+              echo "<script>alert('Please login or register')</script>";
+              echo "<script> window.location.replace('login.php')</script>";
+          }
+      }
+      if ($_GET['submit'] == "search")
+      {
+          $search = $_GET['search'];
+          $sqlquery = "SELECT * FROM tbl_products WHERE product_name LIKE '%$search%'";
+      }
+  }
+  else
+  {
+      $sqlquery = "SELECT * FROM tbl_products WHERE id > 0";
+  }
+  
+  $stmtqty = $conn->prepare("SELECT * FROM tbl_carts WHERE user_email = '$useremail'");
+  $stmtqty->execute();
+  $resultqty = $stmtqty->setFetchMode(PDO::FETCH_ASSOC);
+  $rowsqty = $stmtqty->fetchAll();
+  foreach ($rowsqty as $carts)
+  {
+      $carttotal = $carts['cart_qty'] + $carttotal;
+  }
+  
+  $results_per_page = 10;
+  if (isset($_GET['pageno']))
+  {
+      $pageno = (int)$_GET['pageno'];
+      $page_first_result = ($pageno - 1) * $results_per_page;
+  }
+  else
+  {
+      $pageno = 1;
+      $page_first_result = 0;
+  }
+  
+  $stmt = $conn->prepare($sqlquery);
+  $stmt->execute();
+  $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+  $rows = $stmt->fetchAll();
+  $number_of_result = $stmt->rowCount();
+  $number_of_page = ceil($number_of_result / $results_per_page);
+  $sqlquery = $sqlquery . " LIMIT $page_first_result , $results_per_page";
+  $stmt = $conn->prepare($sqlquery);
+  $stmt->execute();
+  $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+  $rows = $stmt->fetchAll();
+  
+  function subString($str)
+  {
+      if (strlen($str) > 15)
+      {
+          return $substr = substr($str, 0, 15) . '...';
+      }
+      else
+      {
+          return $str;
+      }
+  }  */
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +157,7 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="../style/style.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="../javascript/script.js"></script>
 </head>      
 
@@ -48,10 +171,12 @@
     </b></h3>
   </div>
   <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
-    <a href="#" class="w3-bar-item w3-button">Home</a>
+    <a href="home.php" class="w3-bar-item w3-button">Home</a>
     <a href="product.php" class="w3-bar-item w3-button">Products</a>
+    
 
   </div>
+  <a href="login.php" class="w3-bar-item w3-button w3-padding">Login</a> 
   <a href="#footer" class="w3-bar-item w3-button w3-padding">Contact</a> 
   <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding" onclick="document.getElementById('newsletter').style.display='block'">Purchase History</a>
   <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn">
@@ -82,7 +207,8 @@
   <header class="w3-container w3-xlarge">
     <p class="w3-left">Pau</p>
     <p class="w3-right">
-      <i class="fa fa-shopping-cart w3-margin-right"></i>
+      <a href="login.php" class="w3-bar-item w3-button">Welcome   <?php echo$useremail?></a>
+      <a href="mycart.php"><i class="fa fa-shopping-cart w3-margin-right" ></i></a>
       <i class="fa fa-search"></i>
     </p>
   </header>
@@ -91,9 +217,10 @@
   <div class="w3-row w3-grayscale">
     
       <?php
+      $cart = 'cart';
           foreach ($rows as $products){
-              $productid = $products['productid'];
-              $name = $products['name'];
+              $productid = $products['product_id'];
+              $productname = $products['product_name'];
               $price = $products['price'];
 
               echo "<div class='w3-col l3 s6'><div class='w3-display-container'>
@@ -101,8 +228,8 @@
               <img class='w3-image' src=../res/images/$productid.png
               onerror=this.onerro=null; this.src='../res/images/users/profile.png style='width:267px; height:270px'></a>
               <div class='w3-display-middle w3-display-hover'>
-              <button class='w3-button w3-black'>Buy now <i class='fa fa-shopping-cart'></i></button></div>
-              <b>$name</b><br>RM $price<br>
+              <a href='product.php?productid=$productid&submit=$cart' button class='w3-button w3-black')'>Add to Cart <i class='fa fa-shopping-cart'></i></a></button></div>
+              <b>$productname</b><br>RM $price<br>
 
               </div></div></div>";
             
@@ -161,6 +288,38 @@
 
   <!-- End page content -->
 </div>
+
+  
+<script>
+ function addCart(productid) {
+	jQuery.ajax({
+		type: "GET",
+		url: "updatecartajax.php",
+		data: {
+			productid: productid,
+			submit: 'add',
+		},
+		cache: false,
+		dataType: "json",
+		success: function(response) {
+		    var res = JSON.parse(JSON.stringify(response));
+		    console.log("HELLO ");
+			console.log(res.status);
+			if (res.status == "success") {
+			    console.log(res.data.carttotal);
+				//document.getElementById("carttotalida").innerHTML = "Cart (" + res.data.carttotal + ")";
+				document.getElementById("carttotalidb").innerHTML = "Cart (" + res.data.carttotal + ")";
+				alert("Success");
+			}
+			if (res.status == "failed") {
+			    alert("Please login/register account");
+			}
+			
+
+		}
+	});
+}
+</script>
 
 </body>
 </html>

@@ -1,32 +1,41 @@
 <!DOCTYPE html>
-<html>
-<title>W3.CSS Template</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="../style/style.css">
-<script src="../javascript/script.js"></script>
+<html lang="en">
+
+<head>
+      <title>MeiJi Product</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="../style/style.css">
+      <script src="../javascript/script.js"></script>
+</head>      
 
 <body class="w3-content" style="max-width:1200px">
 
 <!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
   <div class="w3-container w3-display-container w3-padding-16">
     <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-display-topright"></i>
     <h3 class="w3-wide"><b>MeiJi Food
     </b></h3>
   </div>
   <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
-    <a href="home.php" class="w3-bar-item w3-button">Home</a>
-    <a href="product.php" class="w3-bar-item w3-button">Product</a>
+    <a href="#" class="w3-bar-item w3-button">Home</a>
+    <a href="product.php" class="w3-bar-item w3-button">Products</a>
 
   </div>
+  <a href="login.php" class="w3-bar-item w3-button w3-padding">Login</a> 
   <a href="#footer" class="w3-bar-item w3-button w3-padding">Contact</a> 
   <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding" onclick="document.getElementById('newsletter').style.display='block'">Purchase History</a>
-
+  <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn">
+      Admin <i class="fa fa-caret-down"></i>
+    </a>
+    <div id="demoAcc" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+      <a href="newproduct.php" class="w3-bar-item w3-button">Add a product</a>
+    </div>
 
 </nav>
 
@@ -47,90 +56,64 @@
   
   <!-- Top header -->
   <header class="w3-container w3-xlarge">
-    <p class="w3-left">Pau</p>
-    <p class="w3-right">
-      <i class="fa fa-shopping-cart w3-margin-right"></i>
-      <i class="fa fa-search"></i>
+    <p class="w3-center">Home</p>
+    
     </p>
   </header>
 
-
-  <div class="w3-container w3-text-grey" id="jeans">
-    <p>6 items</p>
-  </div>
-
   <!-- Product grid -->
-  <div class="w3-row w3-grayscale">
-    <div class="w3-col l3 s6">
-      <div class="w3-container">
-      <div class="w3-display-container">
-        <img src="pau1.jpg" style="width:100%">
-        <div class="w3-display-middle w3-display-hover">
-            <button class="w3-button w3-black">Buy now <i class="fa fa-shopping-cart"></i></button>
-          </div>
+  <div id="about" class = "w3-container w3-row w3-black w3-padding-32">
+        <div class="w3-display-container w3-third w3-padding-24 w3-hide-small" style="height:300px;">
+            <i class="fa fa-info-circle w3-display-middle w3-padding" style="font-size:128px;"></i>
         </div>
-        <p>Ripped Skinny Jeans<br><b>$24.99</b></p>
-      </div>
+        <div class="w3-container w3-twothird" style="height:300px;">
+            <h2>About</h2>
+            <p style="font-size: 14px;">BACKGROUND & HISTORY <br> MeiJi was founded in 2002 by Tiang's Family. Focusing on the goals of "Quality, Healthy, and Tradition" the company is family operation
+                making each dishes (dim sum, pau, polished glutinous rice. MeiJi has three generation of family members wroking together to fulfil the idea
+                "Quality is Our Priority". Through hard work and dedication, MeiJi began building its brand around the idea of delicious in Klang Valley. </p>
+        </div>
+    </div>    
 
-      <div class="w3-container">
-      <div class="w3-display-container">
-        <img src="pau3.jpg" style="width:100%">
-        <div class="w3-display-middle w3-display-hover">
-            <button class="w3-button w3-black">Buy now <i class="fa fa-shopping-cart"></i></button>
-          </div>
+    <div id="products" class = "w3-container w3-row w3-cyan w3-padding-32">
+        <div class="w3-container w3-twothird" style="height:300px;">
+            <h2>Products</h2>
+            <p style="font-size: 14px;">Every day, before dawn, without fail, MeiJi begins to grind up material with their own secret receipe, 
+                roll out the dough by handmade & machine and to light the stoves to steam pau. Over the years，deliveryman delivers
+                foods to cafeteria and restaurants who ordered. We take pride in satisfying our customers after having taken respite
+                from their lives to truly enjoy a traditional meal reminding them of our cultural heritage.
+            </p>
         </div>
-        <p>Mega Ripped Jeans<br><b>$19.99</b></p>
-      </div>
+        <div class="w3-display-container w3-third w3-padding-24 w3-hide-small" style="height:300px;">
+            <i class="fa fa-product-hunt w3-display-middle w3-padding" style="font-size:128px;"></i>
+        </div>
+    </div> 
+
+    <div id="images" class="w3-display-container w3-white" style="height:350px;">
+        <img class="mySlides w3-display-middle" src="meijia.jpg" style="height:300px; width:350px;">
+        <img class="mySlides w3-display-middle" src="meijib.jpg" style="height:300px; width:350px;">
+        <img class="mySlides w3-display-middle" src="meijic.jpg" style="height:300px; width:350px;">
     </div>
 
-    <div class="w3-col l3 s6">
-      <div class="w3-container">
-        <div class="w3-display-container">
-          <img src="pau4.jpg" style="width:100%">
-          <span class="w3-tag w3-display-topleft">New</span>
-          <div class="w3-display-middle w3-display-hover">
-            <button class="w3-button w3-black">Buy now <i class="fa fa-shopping-cart"></i></button>
-          </div>
-        </div>
-        <p>Mega Ripped Jeans<br><b>$19.99</b></p>
-      </div>
+    <script>
+        var myIndex=0;
+        carouse1();
+        
+        function carouse1(){
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            for (i=0; i<x.length; i++){
+                x[i].style.display="none";
+            }
+            myIndex++;
+            if(myIndex> x.length){
+                myIndex=1
+            }
+            x[myIndex-1].style.display ="block";
+            setTimeout(carouse1,3000)
+        }
+    </script>
 
 
-      <div class="w3-container">
-      <div class="w3-display-container">
-        <img src="pau5.jpg" style="width:100%">
-        <div class="w3-display-middle w3-display-hover">
-            <button class="w3-button w3-black">Buy now <i class="fa fa-shopping-cart"></i></button>
-          </div>
-        </div>
-        <p>Washed Skinny Jeans<br><b>$20.50</b></p>
-      </div>
-    </div>
-
-    <div class="w3-col l3 s6">
-      <div class="w3-container">
-      <div class="w3-display-container">
-        <img src="pau6.jpg" style="width:100%">
-        <div class="w3-display-middle w3-display-hover">
-            <button class="w3-button w3-black">Buy now <i class="fa fa-shopping-cart"></i></button>
-          </div>
-        </div>
-        <p>Washed Skinny Jeans<br><b>$20.50</b></p>
-      </div>
-
-      <div class="w3-container">
-        <div class="w3-display-container">
-          <img src="pau2.jfif" style="width:100%">
-          <span class="w3-tag w3-display-topleft">Sale</span>
-          <div class="w3-display-middle w3-display-hover">
-            <button class="w3-button w3-black">Buy now <i class="fa fa-shopping-cart"></i></button>
-          </div>
-        </div>
-        <p>Vintage Skinny Jeans<br><b class="w3-text-red">$14.99</b></p>
-      </div>
-    </div>
-
-  
   <!-- Footer -->
   <footer class="w3-padding-64 w3-light-grey w3-small w3-center" id="footer">
     <div class="w3-row-padding">
@@ -182,21 +165,6 @@
 
   <!-- End page content -->
 </div>
-
-<!-- Newsletter Modal -->
-<div id="newsletter" class="w3-modal">
-  <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
-    <div class="w3-container w3-white w3-center">
-      <i onclick="document.getElementById('newsletter').style.display='none'" class="fa fa-remove w3-right w3-button w3-transparent w3-xxlarge"></i>
-      <h2 class="w3-wide">NEWSLETTER</h2>
-      <p>Join our mailing list to receive updates on new arrivals and special offers.</p>
-      <p><input class="w3-input w3-border" type="text" placeholder="Enter e-mail"></p>
-      <button type="button" class="w3-button w3-padding-large w3-red w3-margin-bottom" onclick="document.getElementById('newsletter').style.display='none'">Subscribe</button>
-    </div>
-  </div>
-</div>
-
-
 
 </body>
 </html>

@@ -1,63 +1,53 @@
 <?php
-     if(isset($_POST["submit"])){
-        include_once("../dbconnect.php");
-        $productid=$_POST["productid"];
-        $productname=$_POST["productname"];
-        $material=$_POST["material"];
-        $price=$_POST["price"];
-        $sqlregister = "INSERT INTO `tbl_products`(`product_id`, `product_name`, `material`, `price`) VALUES ('$productid', '$productname', '$material',
-        '$price')";
-        try{
-            $conn->exec($sqlregister);
-            if (file_exists($_FILES["fileToUpload"]["tmp_name"]) || is_uploaded_file($_FILES["fileToUpload"]["tmp_name"])){
-                uploadImage($productid);
-                echo "<script>alert('Registration successful')</script>";
-                echo "<script>window.location.replace('product.php')</script>";
-            }    
-            
-        }catch (PDOException $e) {
-                echo"<script>alert('Registration failed')</script>";
-                echo "<script>window.location.replace('newproduct.php')</script>";
-            }
-    }
+include_once ("../dbconnect.php");
+$productid = $_GET['productid'];
+$sqlquery = "SELECT * FROM tbl_products WHERE product_id = $productid";
+$stmt = $conn->prepare($sqlquery);
+$stmt->execute();
+$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+$rows = $stmt->fetchAll();
 
-        function uploadImage($id){
-            $target_dir = "../res/images/";
-            $target_file = $target_dir . $id . ".png";
-            move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
-        }
+foreach ($rows as $products)
+{
+    $productid = $products['product_id'];
+    $productname = $products['product_name'];
+    $material = $products['material'];
+    $price = $products['price'];
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-<title>MeiJi</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="../style/style.css">
-<script src="../javascript/script.js"></script>
-
-    </head>
+      <title>MeiJi Product</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="../style/style.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="../javascript/script.js"></script>
+</head>      
 
 <body class="w3-content" style="max-width:1200px">
 
 <!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-bar-block w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
+<nav class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="z-index:3;width:250px" id="mySidebar">
   <div class="w3-container w3-display-container w3-padding-16">
     <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-display-topright"></i>
     <h3 class="w3-wide"><b>MeiJi Food
     </b></h3>
   </div>
-  <div class="w3-padding-64  w3-large w3-text-grey" style="font-weight:bold">
+  <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
     <a href="home.php" class="w3-bar-item w3-button">Home</a>
     <a href="product.php" class="w3-bar-item w3-button">Products</a>
+    
 
   </div>
+  <a href="login.php" class="w3-bar-item w3-button w3-padding">Login</a> 
   <a href="#footer" class="w3-bar-item w3-button w3-padding">Contact</a> 
   <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding" onclick="document.getElementById('newsletter').style.display='block'">Purchase History</a>
   <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn">
@@ -86,61 +76,32 @@
   
   <!-- Top header -->
   <header class="w3-container w3-xlarge">
-    <p class="w3-left">New Products</p>
+    <p class="w3-left">Pau</p>
     <p class="w3-right">
-    <a href="login.php" class="w3-bar-item w3-button">Login</a>
-      <a href="mycart.php"><i class="fa fa-shopping-cart w3-margin-right" ></i></a>
+      <a href="login.php" class="w3-bar-item w3-button">Welcome   <?php echo$user_name?></a>
+      <a href="mycart.php"><i class="fa fa-shopping-cart w3-margin-right" >(<?php echo $carttotal?></i></a>
       <i class="fa fa-search"></i>
     </p>
   </header>
 
-  <!-- Product form -->
-  <div class="w3-container w3-padding-64 form-container">
-        <div class="w3-card">
-            <div class="w3-container w3-black">
-                <p>New Product Registration</p>
-            </div>
-            <form class="w3-container w3-padding " name="registerForm" action="newproduct.php" method="post" onsubmit="return confirmDialog()" enctype="multipart/form-data">
-                <div class="w3-container w3-border w3-center w3-padding">
-                    <img class="w3-image w3-round w3-margin"
-                    src="../res/images/profile.png" style="width:100%;
-                    max-width:600px"><br>
-                    <input type="file" onchange="previewFile()" name="fileToUpload"
-                    id="fileToUpload"><br>
-                </div>
-
-                <p>
-                    <label>Product ID</label>
-                    <input class="w3-input w3-border w3-round" name="productid" id="idproductid"
-                    type="text" required>
-                </p>
-
-                <p>
-                    <label>Food Name</label>
-                    <input class="w3-input w3-border w3-round" name="productname" id="idname"
-                    type="text" required>
-                </p>
-
-                <p>
-                    <label>Material</label>
-                    <input class="w3-input w3-border w3-round" name="material" id="idmaterial"
-                    type="text" required>
-                </p>
-
-                <p>
-                    <label>Price</label>
-                    <input class="w3-input w3-border w3-round" name="price" id="idprice"
-                    type="double" required>
-                </p>
-
-                <div class="row">
-                    <input class="w3-input w3-border w3-block w3-black w3-round" type="submit" 
-                    name="submit" value="Submit">
-                </div>
-            </form>
+  <!-- Product grid -->
+  <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
+      
+      <div class="w3-row w3-card">
+        <div class="w3-half w3-center">
+            <img class="w3-image w3-margin w3-center" style="height:100%;width:100%;max-width:330px" src="src=../res/images/<?php echo $book_isbn?>.png">
+        </div>
+        <div class="w3-half w3-container">
+            <?php 
+            echo "<h3 class='w3-center'><b>$productname</h3></b>
+            <p>Material<br>$material</p>
+            <p style='font-size:160%;'>RM $price</p>
+            <p> <a href='product.php?productid=$productid' class='w3-btn w3-blue w3-round'>Add to Cart</a><p><br>";            
+            ?>
+        </div>
         </div>
     </div>
-  
+
   <!-- Footer -->
   <footer class="w3-padding-64 w3-light-grey w3-small w3-center" id="footer">
     <div class="w3-row-padding">
@@ -192,7 +153,6 @@
 
   <!-- End page content -->
 </div>
-
 
 </body>
 </html>
